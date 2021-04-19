@@ -50,7 +50,7 @@ class Bird:
         
         self.y = self.y +d
 
-        if d < 0 or self.y < self.height + 5:
+        if d < 0 or self.y < self.height + 50:
             if self.tilt < self.MAX_ROTATION:
                 self.tilt = self.MAX_ROTATION
         else:
@@ -173,15 +173,12 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_UP:
-                    bird.jump()
-        bird.move()
+        #bird.move()
         add_pipe = False
         rem =[]
         for pipe in pipes:
             if pipe.collide(bird):
-                score = 0
+                pass
             if pipe.x + pipe.PIPE_TOP.get_width() < 0:
                 rem.append(pipe)
             
@@ -198,7 +195,7 @@ def main():
             pipes.remove(r)
 
         if bird.y + bird.img.get_height() >= 730:
-            score=0
+            pass
 
         base.move()
         draw_window(win, bird,pipes,base,score)
