@@ -167,6 +167,7 @@ def main():
     clock = pygame.time.Clock()
     run = True
     score = 0
+    bird_died = 0
     
     while run:
         clock.tick(30)
@@ -176,20 +177,22 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
                     bird.jump()
-        bird.move()
+        if bird_died == 0:
+            bird.move()
         add_pipe = False
         rem =[]
-        for pipe in pipes:
-            if pipe.collide(bird):
-                score = 0
-            if pipe.x + pipe.PIPE_TOP.get_width() < 0:
-                rem.append(pipe)
-            
-            if not pipe.passed and pipe.x < bird.x:
-                pipe.passed = True
-                add_pipe = True
+        if bird_died == 0:
+            for pipe in pipes:
+                if pipe.collide(bird):
+                    bird_died = 1
+                if pipe.x + pipe.PIPE_TOP.get_width() < 0:
+                    rem.append(pipe)
+                
+                if not pipe.passed and pipe.x < bird.x:
+                    pipe.passed = True
+                    add_pipe = True
 
-            pipe.move()
+                pipe.move()
         if add_pipe:
             score += 1
             pipes.append(Pipe(600))
@@ -198,9 +201,9 @@ def main():
             pipes.remove(r)
 
         if bird.y + bird.img.get_height() >= 730:
-            score=0
-
-        base.move()
+            bird_died = 1
+        if bird_died == 0:
+            base.move()
         draw_window(win, bird,pipes,base,score)
     pygame.quit()
     quit()
